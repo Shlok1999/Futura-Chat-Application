@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <p class="number">0</p>
+
+    <form action="" id="form">
+        <input  type="text" placeholder="Enter message" name="" id="input">
+        <button>Send</button>
+    </form>
+    <div style="height: 200px; width: 90vw; border: 2px solid black; margin-top: 2rem; overflow-y: scroll;"
+        class="msg-container" id="messages">
+
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        var number = document.querySelector('.number')
+        var num = 0
+        var messages = document.getElementById('messages');
+        var form = document.getElementById('form');
+        var input = document.getElementById('input');
+      
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          if (input.value) {
+            socket.emit('message', input.value);
+            input.value = '';
+          }
+        });
+
+      
+        socket.on('message', function(msg) {
+          var item = document.createElement('li');
+          item.textContent = msg;
+          messages.appendChild(item);
+          window.scrollTo(0, document.body.scrollHeight);
+          number.innerHTML=`${num++}`
+          
+        });
+      </script>
+
+</body>
+
+</html>
